@@ -180,9 +180,11 @@ Chạy **5 câu hỏi đánh giá của nhóm** trên mã nguồn cá nhân củ
 
 | Tiêu chí | Điểm tự đánh giá |
 |----------|-------------------|
-| Khởi động (Warm-up) | / 5 |
-| Hướng tiếp cận của tôi (My Approach) | / 10 |
-| Hoàn thiện code (Core Implementation — tests) | / 30 |
-| Dự đoán độ tương tự (Similarity Predictions) | / 5 |
-| Kết quả truy xuất của tôi (Competition Results) | / 10 |
-| **Tổng phần cá nhân** | **/ 60** |
+| Khởi động (Warm-up) | 5 / 5 |
+| Hướng tiếp cận của tôi (My Approach) | 9 / 10 |
+| Hoàn thiện code (Core Implementation — tests) | 30 / 30 |
+| Dự đoán độ tương tự (Similarity Predictions) | 5 / 5 |
+| Kết quả truy xuất của tôi (Competition Results) | 8 / 10 |
+| **Tổng phần cá nhân** | **57 / 60** |
+
+> Ghi chú tự đánh giá: Hoàn thiện code đủ 30 điểm vì `pytest` đạt 42/42. Hướng tiếp cận trừ 1 điểm vì một số trường hợp biên (chữ viết tắt trong `SentenceChunker`) chưa xử lý được. Kết quả truy xuất trừ 2 điểm vì Q3–Q5 khác bộ câu hỏi ghi trong báo cáo nhóm (đáp án chuẩn cũ không có trên trang nguồn, xem mục 5).
