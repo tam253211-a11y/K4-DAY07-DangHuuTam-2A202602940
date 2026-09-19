@@ -1,0 +1,65 @@
+Embedding backend: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+LLM cho agent: nvidia/nemotron-3-super-120b-a12b
+Corpus: 5 tài liệu trong data\thu-vien-vnulib
+
+==============================================================================
+Chiến lược: hybrid  |  đã nạp 54 đoạn nhỏ (dài trung bình 272, lớn nhất 420) -> 25 mục cha trả về cho agent (trung bình 436, lớn nhất 1169 ký tự)
+==============================================================================
+
+[Q1] (không lọc) Sinh viên hệ chính quy được mượn tối đa bao nhiêu tài liệu và trong thời gian bao lâu?
+  gold: hcmut-lib-borrowing-student | dấu hiệu đáp án: (('Sinh viên | 5 | 21', 'Đối tượng: Sinh viên; Số lượng tài liệu: 5; Số ngày: 21'),)
+  #1 score=0.806 hcmut-lib-borrowing-student#p2               ### Đối tượng thuộc ĐHQG-HCM (hệ chính quy) (*) - Đối tượng: Giảng viên, Cán bộ, Học viên sau đ
+  #2 score=0.751 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền cọc; - Mượn quá hạn 
+  #3 score=0.801 hcmut-lib-borrowing-student#p3               ### Đối tượng thuộc ĐHQG-HCM (hệ không chính quy) (**) - Đối tượng: Học sinh; Độc giả thuộc hệ 
+  -> điểm 2/2 (chunk gold tốt nhất ở hạng 1, chứa 1/1 ý của đáp án; gold có trong top-3: True)
+  Agent (LLM): Sinh viên hệ chính quy được mượn tối đa 5 tài liệu và thời gian mượn là 21 ngày. [1]
+  Gold answer: Sinh viên được mượn tối đa 5 tài liệu trong 21 ngày, gia hạn 1 lần 21 ngày.
+
+[Q2] (không lọc) Trả tài liệu trễ hạn thì bị phạt bao nhiêu tiền một ngày?
+  gold: hcmut-lib-borrowing-student | dấu hiệu đáp án: ('Mức phạt: 5.000đ/tài liệu/ngày',)
+  #1 score=0.623 hcmut-lib-borrowing-student#p9               ## Phạt và bồi thường hư hỏng tài liệu - Phạt trễ hạn: Mức phạt: 5.000đ/tài liệu/ngày. Nếu độc 
+  #2 score=0.591 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền cọc; - Mượn quá hạn 
+  #3 score=0.542 hcmut-lib-borrowing-student#p4               ### Đối tượng ngoài ĐHQG-HCM (***) - Đối tượng: Độc giả ngoài ĐQHG-HCM; Số lượng tài liệu: 2; S
+  -> điểm 2/2 (chunk gold tốt nhất ở hạng 1, chứa 1/1 ý của đáp án; gold có trong top-3: True)
+  Agent (LLM): Trả tài liệu trễ hạn sẽ bị phạt 5.000đ cho mỗi tài liệu mỗi ngày. [1]
+  Gold answer: Phạt trễ hạn 5.000đ/tài liệu/ngày (khác với phí mượn 1.000đ/cuốn/ngày của độc giả phải đóng phí).
+
+[Q3] (lọc {'audience': 'student'}) Có phải đặt tiền cọc khi mượn sách không?
+  gold: hcmut-lib-borrowing-student | dấu hiệu đáp án: ('(*) Đối tượng không phải đặt tiền cọc và phí mượn sách',)
+  #1 score=0.708 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền cọc; - Mượn quá hạn 
+  #2 score=0.650 hcmut-lib-borrowing-student#p5               ## Chính sách đặt tiền cọc - Giá bìa sách (VNĐ): Dưới 100.000; Số tiền thế chân (VNĐ): 1.000.00
+  #3 score=0.611 hcmut-lib-borrowing-student#p2               ### Đối tượng thuộc ĐHQG-HCM (hệ chính quy) (*) - Đối tượng: Giảng viên, Cán bộ, Học viên sau đ
+  -> điểm 1/2 (chunk gold tốt nhất ở hạng 3, chứa 1/1 ý của đáp án; gold có trong top-3: True)
+  Agent (LLM): Có phải đặt tiền cọc khi mượn sách phụ thuộc vào đối tượng mượn. Theo quy định tại [3], đối tượng thuộc ĐHQG‑HCM (hệ chính quy) bao gồm giảng viên, cán bộ, học viên sau đại học, nghiên cứu sinh và sinh viên **không phải đặt tiền cọc** (và cũng không phải trả phí mượn sách). Đối với các đối tượng khác không được liệt kê trong mục này, thì phải đặt tiền cọc theo mức quy định tại [2], tức là tiền thế chân được tính dựa trên giá bìa sách theo các bậc đã nêu và làm tròn số.  
+    
+    [2][3]
+  Gold answer: Sinh viên hệ chính quy thuộc ĐHQG-HCM không phải đặt tiền cọc và phí mượn sách (chỉ hệ không chính quy và độc giả ngoài ĐHQG-HCM mới phải đặt cọc).
+  [A/B không lọc] điểm 1/2 (hạng có đáp án: 3)
+    #1 score=0.650 hcmut-lib-borrowing-student#p5               ## Chính sách đặt tiền cọc - Giá bìa sách (VNĐ): Dưới 100.000; Số tiền thế 
+    #2 score=0.708 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền 
+    #3 score=0.611 hcmut-lib-borrowing-student#p2               ### Đối tượng thuộc ĐHQG-HCM (hệ chính quy) (*) - Đối tượng: Giảng viên, Cá
+
+[Q4] (không lọc) Làm mất tài liệu thì phải đền như thế nào?
+  gold: hcmut-lib-borrowing-student | dấu hiệu đáp án: ('Giá bìa x 3 + 50.000đ/tài liệu', 'Như tài liệu gốc/năm xuất bản mới hơn + 50.000đ/tài liệu')
+  #1 score=0.455 hcmut-lib-borrowing-student#p9               ## Phạt và bồi thường hư hỏng tài liệu - Phạt trễ hạn: Mức phạt: 5.000đ/tài liệu/ngày. Nếu độc 
+  #2 score=0.389 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền cọc; - Mượn quá hạn 
+  #3 score=0.391 hcmut-lib-policy-adjustment#p0               THÔNG BÁO V/v điều chỉnh chính sách mượn trả tài liệu đối với độc giả tại TVTT Căn cứ Thông báo
+  -> điểm 2/2 (chunk gold tốt nhất ở hạng 1, chứa 2/2 ý của đáp án; gold có trong top-3: True)
+  Agent (LLM): Nếu làm mất tài liệu, độc giả có hai cách bồi thường:
+    
+    - **Đền bằng tiền:** Thanh toán bằng giá bìa của tài liệu nhân 3, cộng thêm 50.000đ cho mỗi tài liệu và cộng thêm phí phạt trễ hạn (nếu có).  
+    - **Đền bằng tài liệu:** Thay thế bằng bản sao giống tài liệu gốc hoặc bản mới hơn, cộng thêm 50.000đ cho mỗi tài liệu và cộng thêm phí phạt trễ hạn (nếu có).  
+    
+    [1]
+  Gold answer: Đền bằng tiền: giá bìa x 3 + 50.000đ/tài liệu + phí phạt trễ hạn (nếu có); hoặc đền bằng tài liệu như bản gốc hoặc năm xuất bản mới hơn + 50.000đ/tài liệu + phí phạt trễ hạn (nếu có).
+
+[Q5] (không lọc) Photocopy tài liệu ở thư viện tính phí bao nhiêu một trang?
+  gold: hcmut-lib-document-delivery | dấu hiệu đáp án: ('Photocopy 250đ/trang A4',)
+  #1 score=0.668 hcmut-lib-document-delivery#p1               ## Nội dung giao dịch và phí dịch vụ Phí dịch vụ tính theo hai nhóm: độc giả thuộc ĐHQG-HCM và 
+  #2 score=0.541 hcmut-lib-document-delivery#p2               ## Nội dung giao dịch và phí dịch vụ - Dịch vụ tập huấn kỹ năng thông tin, đào tạo nghiệp vụ th
+  #3 score=0.495 hcmut-lib-borrowing-student#p6               ## Phí mượn Phí mượn: 1.000đ /1 cuốn /1 ngày Lưu ý: - Giữ kỹ biên lai tiền cọc; - Mượn quá hạn 
+  -> điểm 2/2 (chunk gold tốt nhất ở hạng 1, chứa 1/1 ý của đáp án; gold có trong top-3: True)
+  Agent (LLM): Photocopy tài liệu ở thư viện tính phí 250 đ mỗi trang A4. [1]
+  Gold answer: Photocopy 250đ/trang A4 (scan và in là 1.000đ/trang A4).
+
+TỔNG hybrid: 9/10 (chấm theo nội dung) | doc_id đúng trong top-3: 5/5 (chấm ngây thơ)
